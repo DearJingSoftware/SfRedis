@@ -6,8 +6,22 @@
         xmlns:local="clr-namespace:SfRedis"
         mc:Ignorable="d"
         Title="SfRedis" Height="600" Width="960">
-    <Grid>
-        <Button Content="测试" HorizontalAlignment="Left" Margin="383,84,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="230,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+    <Grid Height="569" VerticalAlignment="Bottom">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="49*"/>
+            <RowDefinition Height="520*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="311*"/>
+            <ColumnDefinition Width="641*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="连接"  Name="RedisHostConnect"    HorizontalAlignment="Left" Margin="143,11,0,19" Width="48" Click="Button_Redis_Connect"/>
+        <Button Content="断开"  Name="RedisHostDisconnect" HorizontalAlignment="Left" Margin="196,11,0,19" Width="48" Click="Button_Redis_Disconnect"/>
+        <Button Content="测试"  Name="RedisHostTest"       HorizontalAlignment="Left" Margin="250,11,0,19" Width="48" Click="RedisHostTest_Click"/>
+        <TextBox VerticalContentAlignment="Center" Name="RedisHost" Text="localhost" HorizontalAlignment="Left" Margin="10,10,0,16" TextWrapping="Wrap" Width="120"/>
+        <TextBox VerticalContentAlignment="Center" Name="RedisCommandInput" Grid.Column="1" Margin="15,12,98,14" TextWrapping="Wrap" Text="" TextChanged="RedisCommandInput_TextChanged"  KeyDown="RedisCommandExec_KeyDown" VerticalAlignment="Top"/>
+        <Button  Content="执行"  Name="RedisCommandExec"     Grid.Column="1"   HorizontalAlignment="Left" Margin="564,11,0,0" Width="48" Click="RedisCommandExec_Click" VerticalAlignment="Top"/>
+
     </Grid>
 </Window>
