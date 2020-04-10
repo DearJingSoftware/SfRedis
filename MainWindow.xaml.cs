@@ -1,6 +1,7 @@
 ﻿using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,24 @@ namespace SfRedis
     /// </summary>
     public partial class MainWindow : Window
     {
+      
+        class TextWriter1 : TextWriter
+        {
+            internal TextBox textBlock;
+
+            public override Encoding Encoding => throw new NotImplementedException();
+            public override void WriteLine(string value)
+            {
+                //写入session 日志
+                base.Write(value);
+                textBlock.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    textBlock.Text = value + "\n" + textBlock.Text;
+                }));
+            }
+        }
+
+       
         ConnectionMultiplexer redis = null;
 
         IDatabase db = null;
@@ -44,11 +63,16 @@ namespace SfRedis
             }
             //重新初始化
             try {
-                redis = ConnectionMultiplexer.Connect(RedisHost.Text);
+                var log = new MainWindow.TextWriter1();
+                log.textBlock = SessionLog;
+                ConfigurationOptions configurationOptions = new ConfigurationOptions();
+                configurationOptions.ReconnectRetryPolicy= new LinearRetry(5000);
+                
+                redis = ConnectionMultiplexer.Connect(RedisHost.Text, log);
                 db = redis.GetDatabase();
             }
             catch (Exception ex) {
-                MessageBox.Show(ex.Message);
+                SessionLog.Text = ex.Message.ToString();
             }
           
         
@@ -57,12 +81,6 @@ namespace SfRedis
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        private void RedisHostTest_Click(object sender, RoutedEventArgs e)
-        {
-            db.StringSet("test", "c# redis");
-            MessageBox.Show(db.StringGet("test"));
         }
 
         public static String[] SubArray<String>(String[]  data, int index, int length)
@@ -91,11 +109,45 @@ namespace SfRedis
                     String[] args = RedisCommandInput.Text.Split(' ');
                     String[] arg1 = SubArray(args, 1, args.Length - 1);
                     RedisResult redisResult = db.Execute(args[0], arg1);
-                    MessageBox.Show(redisResult.ToString());
+                    RedisResult.Text = redisResult.Type.ToString();
+                    switch (redisResult.Type) {
+                        case ResultType.BulkString:
+                            {
+                                RedisResult.Text = redisResult.ToString();
+                                break;
+                            }
+                        case ResultType.SimpleString:
+                            {
+                                RedisResult.Text = redisResult.ToString();
+                                break;
+                            }
+                        case ResultType.MultiBulk:
+                            {
+                                foreach (KeyValuePair<string, RedisResult> entry in redisResult.ToDictionary())
+                                {
+                                    RedisResult.Text = RedisResult.Text + "\n" + entry.Value;
+                                }
+                                break;
+                            }
+                        case ResultType.Integer: {
+                                RedisResult.Text = redisResult.ToString();
+                                break;
+                            }
+                        case ResultType.Error:
+                            {
+                                RedisResult.Text = redisResult.ToString();
+                                break;
+                            }
+                        case ResultType.None:
+                            {
+                                RedisResult.Text = "没有返回值";
+                                break;
+                            }
+                    }
                 }
-                catch
+                catch(Exception ex)
                 {
-
+                    SessionLog.Text = ex.Message.ToString();
                 }
             }
         }
