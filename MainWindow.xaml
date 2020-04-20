@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SfRedis"
         mc:Ignorable="d"
-        Title="SfRedis" Height="600" Width="960">
+        Title="SfRedis" Height="600" Width="1160">
     <Grid Height="569" VerticalAlignment="Bottom">
         <Grid.RowDefinitions>
-            <RowDefinition Height="49*"/>
-            <RowDefinition Height="491*"/>
+            <RowDefinition Height="55*"/>
+            <RowDefinition Height="247*"/>
+            <RowDefinition Height="238*"/>
             <RowDefinition Height="29*"/>
         </Grid.RowDefinitions>
 
@@ -17,27 +18,38 @@
             <ColumnDefinition Width="129*"/>
             <ColumnDefinition Width="347*"/>
         </Grid.ColumnDefinitions>
-        <Button Content="连接"  Name="RedisHostConnect"    HorizontalAlignment="Left" Margin="141,0,0,19" Width="48" Click="Button_Redis_Connect" Height="19" VerticalAlignment="Bottom"/>
+        <Button Content="连接"  Name="RedisHostConnect"    HorizontalAlignment="Left" Margin="144,0,0,19" Width="48" Click="Button_Redis_Connect" Height="19" VerticalAlignment="Bottom"/>
         <Button Content="断开"  Name="RedisHostDisconnect" HorizontalAlignment="Left" Margin="196,0,0,19" Width="48" Click="Button_Redis_Disconnect" Height="19" VerticalAlignment="Bottom"/>
         <TextBox VerticalContentAlignment="Center" Name="RedisHost" Text="localhost" HorizontalAlignment="Left" Margin="10,0,0,16" TextWrapping="Wrap" Width="120" Height="23" VerticalAlignment="Bottom"/>
         <TextBox VerticalContentAlignment="Center" Name="RedisCommandInput" Grid.Column="1" Margin="15,0,15,20" TextWrapping="Wrap" Text="" TextChanged="RedisCommandInput_TextChanged"  KeyDown="RedisCommandExec_KeyDown" VerticalAlignment="Bottom" Height="17"/>
-        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0"/>
-        <TreeView Grid.Row="1" Name="SessionTree" MouseDoubleClick="SessionTreeItemMouseDoubleClick">
-            <TreeViewItem Header="localhost">
-             
-            </TreeViewItem>
-            <TreeViewItem Header="192.168.0.1">
-            
-            </TreeViewItem>
+        <StatusBar Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,0">
+            <Label Content="version:v0.1" Width="87"/>
+        </StatusBar>
+        <TreeView Grid.Row="1" Name="SessionTree" Grid.RowSpan="2">
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="新增"/>
+                </ContextMenu>
+            </TreeView.ContextMenu>
         </TreeView>
-        <StackPanel Grid.Column="1" Margin="0,0,0,0" Grid.Row="1" HorizontalAlignment="Stretch" >
-            <TextBox TextWrapping="Wrap" Text="" Name="RedisResult"  
+        <TextBox Grid.Column="1" Margin="5,0,0,0" Grid.Row="1" TextWrapping="Wrap"   Name="RedisResult"  
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-            <TextBox TextWrapping="Wrap" Text="" Name="SessionLog"  
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-        </StackPanel>
+                            ScrollViewer.VerticalScrollBarVisibility="Auto" >
+            <TextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="清空日志"/>
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
+        <TextBox Grid.Column="1" Margin="5,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="" x:Name="SessionLog"  
+                             >
+            <TextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="清空日志"/>
+                </ContextMenu>
+            </TextBox.ContextMenu>
+
+        </TextBox>
 
 
     </Grid>

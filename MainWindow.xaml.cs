@@ -1,4 +1,5 @@
-﻿using StackExchange.Redis;
+﻿using Microsoft.Win32;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace SfRedis
 {
@@ -29,6 +31,8 @@ namespace SfRedis
                 {
                     textBlock.Text = value + "\n" + textBlock.Text;
                 }));
+
+
             }
         }
 
@@ -40,6 +44,14 @@ namespace SfRedis
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
+
+            Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Sfigure", "Session", "hi Sfigure");
+
+            string Session = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Sfigure", "Session", null);
+            if (Session != null)
+            {
+                Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Sfigure", "Session", "hi Sfigure");
+            }
             RedisHostConnect.IsEnabled = true;
             RedisHostDisconnect.IsEnabled = false;
         }
@@ -52,7 +64,14 @@ namespace SfRedis
             redis.CloseAsync();
         }
 
-
+        private void KeyItemMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem target = (TreeViewItem)sender;
+            String key = target.Header.ToString();
+            string[] a = { key };
+            RedisResult redisResult= db.Execute("get", a );
+            parseResult(redisResult);
+        }
         private void  SessionTreeItemMouseDoubleClick(object sender, RoutedEventArgs e) {
             MessageBox.Show("双击");
         }
@@ -84,9 +103,40 @@ namespace SfRedis
                 RedisHostDisconnect.IsEnabled = true;
 
                 TreeViewItem a = new TreeViewItem();
-                a.Header = "测试";
+
+                StackPanel stack = new StackPanel();
+                stack.Orientation = Orientation.Horizontal;
+
+                // create Image
+                Image image = new Image();
+                image.Source = new BitmapImage
+                    (new Uri("pack://application:,,/Images/" + "redis.ico"));
+                image.Width = 16;
+                image.Height = 16;
+                // Label
+                Label lbl = new Label();
+                lbl.Content = RedisHost.Text;
+
+
+                // Add into stack
+                stack.Children.Add(image);
+                stack.Children.Add(lbl);
+                a.Header =stack;
+
+                //增加
+                //获取全部的key
+                string[] argv = { "*" };
+                var redisResult = db.Execute("keys", argv);
+
+                foreach (KeyValuePair<string, RedisResult> entry in redisResult.ToDictionary())
+                {
+                   
+                    TreeViewItem KeyItem = new TreeViewItem();
+                    KeyItem.Header= entry.Value;
+                    KeyItem.MouseDoubleClick += KeyItemMouseDoubleClick;
+                    a.Items.Add(KeyItem);
+                }
                 SessionTree.Items.Add(a);
-                
             }
             catch (Exception ex) {
                 SessionLog.Text = ex.Message.ToString();
@@ -118,49 +168,56 @@ namespace SfRedis
 
         }
 
+        private  void parseResult(RedisResult redisResult) {
+            RedisResult.Text = redisResult.Type.ToString();
+            switch (redisResult.Type)
+            {
+                case ResultType.BulkString:
+                    {
+                        RedisResult.Text = redisResult.ToString();
+                        break;
+                    }
+                case ResultType.SimpleString:
+                    {
+                        RedisResult.Text = redisResult.ToString();
+                        break;
+                    }
+                case ResultType.MultiBulk:
+                    {
+                        foreach (KeyValuePair<string, RedisResult> entry in redisResult.ToDictionary())
+                        {
+                            RedisResult.Text = RedisResult.Text + "\n" + entry.Value;
+                        }
+                        break;
+                    }
+                case ResultType.Integer:
+                    {
+                        RedisResult.Text = redisResult.ToString();
+                        break;
+                    }
+                case ResultType.Error:
+                    {
+                        RedisResult.Text = redisResult.ToString();
+                        break;
+                    }
+                case ResultType.None:
+                    {
+                        RedisResult.Text = "没有返回值";
+                        break;
+                    }
+            }
+        }
+
         private void RedisCommandExec_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Return) {
                 try
                 {
-                    String[] args = RedisCommandInput.Text.Split(' ');
-                    String[] arg1 = SubArray(args, 1, args.Length - 1);
+                    string[] args = RedisCommandInput.Text.Split(' ');
+                    string[] arg1 = SubArray(args, 1, args.Length - 1);
                     RedisResult redisResult = db.Execute(args[0], arg1);
-                    RedisResult.Text = redisResult.Type.ToString();
-                    switch (redisResult.Type) {
-                        case ResultType.BulkString:
-                            {
-                                RedisResult.Text = redisResult.ToString();
-                                break;
-                            }
-                        case ResultType.SimpleString:
-                            {
-                                RedisResult.Text = redisResult.ToString();
-                                break;
-                            }
-                        case ResultType.MultiBulk:
-                            {
-                                foreach (KeyValuePair<string, RedisResult> entry in redisResult.ToDictionary())
-                                {
-                                    RedisResult.Text = RedisResult.Text + "\n" + entry.Value;
-                                }
-                                break;
-                            }
-                        case ResultType.Integer: {
-                                RedisResult.Text = redisResult.ToString();
-                                break;
-                            }
-                        case ResultType.Error:
-                            {
-                                RedisResult.Text = redisResult.ToString();
-                                break;
-                            }
-                        case ResultType.None:
-                            {
-                                RedisResult.Text = "没有返回值";
-                                break;
-                            }
-                    }
+                    parseResult(redisResult);
+                   
                 }
                 catch(Exception ex)
                 {
