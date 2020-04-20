@@ -168,10 +168,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Logo.ico" />
+    <Resource Include="logo.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo.ico" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

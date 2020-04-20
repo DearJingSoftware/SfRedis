@@ -40,12 +40,21 @@ namespace SfRedis
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
+            RedisHostConnect.IsEnabled = true;
+            RedisHostDisconnect.IsEnabled = false;
         }
         /// <summary>
         /// 断开连接
         /// </summary>
         private void Button_Redis_Disconnect(object sender, RoutedEventArgs e) {
+            RedisHostConnect.IsEnabled = true;
+            RedisHostDisconnect.IsEnabled = false;
             redis.CloseAsync();
+        }
+
+
+        private void  SessionTreeItemMouseDoubleClick(object sender, RoutedEventArgs e) {
+            MessageBox.Show("双击");
         }
         /// <summary>
         /// 连接
@@ -67,9 +76,17 @@ namespace SfRedis
                 log.textBlock = SessionLog;
                 ConfigurationOptions configurationOptions = new ConfigurationOptions();
                 configurationOptions.ReconnectRetryPolicy= new LinearRetry(5000);
+
                 
                 redis = ConnectionMultiplexer.Connect(RedisHost.Text, log);
                 db = redis.GetDatabase();
+                RedisHostConnect.IsEnabled = false;
+                RedisHostDisconnect.IsEnabled = true;
+
+                TreeViewItem a = new TreeViewItem();
+                a.Header = "测试";
+                SessionTree.Items.Add(a);
+                
             }
             catch (Exception ex) {
                 SessionLog.Text = ex.Message.ToString();
