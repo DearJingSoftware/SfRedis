@@ -6,26 +6,119 @@
         xmlns:local="clr-namespace:SfRedis"
         mc:Ignorable="d"
         Title="SfRedis" Height="600" Width="1160">
-    <Grid Height="569" VerticalAlignment="Bottom">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="55*"/>
-            <RowDefinition Height="247*"/>
+            <RowDefinition Height="60*"/>
+            <RowDefinition Height="242*"/>
             <RowDefinition Height="238*"/>
             <RowDefinition Height="29*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="129*"/>
-            <ColumnDefinition Width="347*"/>
+            <ColumnDefinition Width="283*"/>
+            <ColumnDefinition Width="869*"/>
         </Grid.ColumnDefinitions>
-        <Button Content="连接"  Name="RedisHostConnect"    HorizontalAlignment="Left" Margin="144,0,0,19" Width="48" Click="Button_Redis_Connect" Height="19" VerticalAlignment="Bottom"/>
-        <Button Content="断开"  Name="RedisHostDisconnect" HorizontalAlignment="Left" Margin="196,0,0,19" Width="48" Click="Button_Redis_Disconnect" Height="19" VerticalAlignment="Bottom"/>
-        <TextBox VerticalContentAlignment="Center" Name="RedisHost" Text="localhost" HorizontalAlignment="Left" Margin="10,0,0,16" TextWrapping="Wrap" Width="120" Height="23" VerticalAlignment="Bottom"/>
-        <TextBox VerticalContentAlignment="Center" Name="RedisCommandInput" Grid.Column="1" Margin="15,0,15,20" TextWrapping="Wrap" Text="" TextChanged="RedisCommandInput_TextChanged"  KeyDown="RedisCommandExec_KeyDown" VerticalAlignment="Bottom" Height="17"/>
-        <StatusBar Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,0">
-            <Label Content="version:v0.1" Width="87"/>
-        </StatusBar>
-        <TreeView Grid.Row="1" Name="SessionTree" Grid.RowSpan="2">
+
+        <TreeView Grid.Row="1" Name="SessionTree" Grid.RowSpan="2" >
+            <TreeView.Resources>
+                <Style x:Key="TreeViewItemFocusVisual">
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Border>
+                                    <Rectangle Margin="0,0,0,0"
+             StrokeThickness="5"
+             Stroke="Black"
+             StrokeDashArray="1 2"
+             Opacity="0"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                    <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                    <Setter Property="Padding" Value="1,0,0,0"/>
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                    <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Border Name="Bd"
+                              Grid.Column="1"                                
+                              Background="{TemplateBinding Background}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter x:Name="PART_Header"
+                                        ContentSource="Header"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                                    </Border>
+                                    <ItemsPresenter x:Name="ItemsHost"
+                          Grid.Row="1"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"/>
+                                </Grid>
+
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsExpanded" Value="false">
+                                        <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="HasHeader" Value="false"/>
+                                            <Condition Property="Width" Value="Auto"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="HasHeader" Value="false"/>
+                                            <Condition Property="Height" Value="Auto"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
+                                    </MultiTrigger>
+                                    <Trigger Property="IsSelected" Value="true">
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="true"/>
+                                            <Condition Property="IsSelectionActive" Value="false"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                    </MultiTrigger>
+                                    <Trigger Property="IsEnabled" Value="false">
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TreeView.Resources>
+            <TreeView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,/Images/redis.ico"></Image>
+                        <TreeViewItem Header="{Binding Path=Name}" MouseDoubleClick="TreeViewItem_MouseDoubleClick"></TreeViewItem>
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.ItemTemplate>
             <TreeView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="新增"/>
@@ -50,7 +143,63 @@
             </TextBox.ContextMenu>
 
         </TextBox>
+        <Menu Height="20" Margin="0,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <MenuItem Header="连接">
+                <MenuItem Header="新建" />
+                <MenuItem Header="删除" />
+                <MenuItem Header="修改" />
+                <MenuItem Header="复制" />
+                <MenuItem Header="退出" />
+            </MenuItem>
+            <MenuItem Header="当前">
+                <MenuItem Header="连接" />
+                <MenuItem Header="断开" />
+                <MenuItem Header="重连" />
+            </MenuItem>
+            <MenuItem Header="Key">
+                <MenuItem Header="删除" />
+                <MenuItem Header="断开" />
+                <MenuItem Header="重连" />
+            </MenuItem>
+            <MenuItem Header="窗口">
+                <MenuItem Header="连接" />
+                <MenuItem Header="断开" />
+                <MenuItem Header="复位" />
+            </MenuItem>
+            <MenuItem Header="帮助">
+                <MenuItem Header="关于" />
+                <MenuItem Header="检测更新" />
+                <MenuItem Header="问题反馈" />
+            </MenuItem>
+        </Menu>
+        <ToolBar Grid.ColumnSpan="2" Height="38" Margin="0,19,0,0" VerticalAlignment="Top">
+            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="58">
+                <Button Content="新建"  x:Name="RedisHostNew"   Margin="5 0"  HorizontalAlignment="Left" Width="48" Click="Button_Redis_New" Height="30" VerticalAlignment="Bottom"/>
+            </ToolBarPanel>
+            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="150">
+                <TextBox VerticalContentAlignment="Center" x:Name="RedisHost" Margin="5,0,-5,0" Text="localhost"  TextWrapping="Wrap" Height="30" VerticalAlignment="Bottom"/>
+            </ToolBarPanel>
+            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="150">
+                <TextBox VerticalContentAlignment="Center" x:Name="RedisPassword" Margin="8,0" Text=""  TextWrapping="Wrap" Height="30" VerticalAlignment="Bottom"/>
+            </ToolBarPanel>
+            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="48">
+                <Button Content="连接"  x:Name="RedisHostConnect"    HorizontalAlignment="Left" Width="48" Click="Button_Redis_Connect" Height="30" VerticalAlignment="Bottom"/>
+            </ToolBarPanel>
+            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="48">
+                <Button Content="断开"  x:Name="RedisHostDisconnect" HorizontalAlignment="Left"  Width="48" Click="Button_Redis_Disconnect" Height="30" VerticalAlignment="Bottom"/>
+            </ToolBarPanel>
+            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="48">
+                <Button Content="重连"  x:Name="RedisHostReconnect" HorizontalAlignment="Left"  Width="48" Click="Button_Redis_Disconnect" Height="30" VerticalAlignment="Bottom"/>
+            </ToolBarPanel>
+        </ToolBar>
 
-
+        <StatusBar Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,0">
+            <StatusBarItem>
+                <Label Content="version:v0.1" Width="87"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBox VerticalContentAlignment="Center" Name="RedisCommandInput" Grid.Column="1" TextWrapping="Wrap" Text="" TextChanged="RedisCommandInput_TextChanged"  KeyDown="RedisCommandExec_KeyDown" VerticalAlignment="Bottom" Height="25" Width="240"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

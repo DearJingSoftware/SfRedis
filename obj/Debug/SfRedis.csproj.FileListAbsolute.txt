@@ -134,3 +134,6 @@ C:\Users\Admin\source\repos\SfRedis\bin\Debug\System.Threading.Tasks.Extensions.
 C:\Users\Admin\source\repos\SfRedis\obj\Debug\SfRedis.exe.config
 C:\Users\Admin\source\repos\SfRedis\obj\Debug\SfRedis.csproj.CopyComplete
 C:\Users\Admin\source\repos\SfRedis\obj\Debug\SfRedis.csprojAssemblyReference.cache
+C:\Users\Admin\source\repos\SfRedis\obj\Debug\SfRedis.csproj.CoreCompileInputs.cache
+C:\Users\Admin\source\repos\SfRedis\obj\Debug\Sessions\Redis\RedisForm.g.cs
+C:\Users\Admin\source\repos\SfRedis\obj\Debug\Sessions\Redis\RedisForm.baml
