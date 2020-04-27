@@ -27,6 +27,9 @@ namespace SfRedis
         //联动工具栏
         void ContextTool();
 
-        void Command();
+        void Command(string text);
+
+        //获取执行历史
+        List<String> History();
     }
 }

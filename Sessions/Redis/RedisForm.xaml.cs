@@ -22,6 +22,7 @@ namespace SfRedis.Sessions.Redis
         RedisSession redisSession = new RedisSession();
         public RedisForm()
         {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
             this.DataContext = redisSession;
         }
@@ -34,6 +35,10 @@ namespace SfRedis.Sessions.Redis
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.sessions.Add(redisSession);
+            //当前连接
+            MainWindow.ctxSession = redisSession;
+            redisSession.Connect();
+            this.Close();
         }
     }
 }

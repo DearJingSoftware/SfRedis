@@ -37,6 +37,7 @@ namespace SfRedis
         }
 
         public static ObservableCollection<Session> sessions = new ObservableCollection<Session> { };
+        public static Session ctxSession =null;
 
         ConnectionMultiplexer redis = null;
 
@@ -45,7 +46,6 @@ namespace SfRedis
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
-
             RedisHostConnect.IsEnabled = true;
             RedisHostDisconnect.IsEnabled = false;
             this.SessionTree.ItemsSource = sessions;
@@ -240,11 +240,7 @@ namespace SfRedis
             {
                 try
                 {
-                    string[] args = RedisCommandInput.Text.Split(' ');
-                    string[] arg1 = SubArray(args, 1, args.Length - 1);
-                    RedisResult redisResult = db.Execute(args[0], arg1);
-                    ParseResult(redisResult);
-
+                    ((RedisSession)ctxSession).Command(RedisCommandInput.Text);
                 }
                 catch (Exception ex)
                 {

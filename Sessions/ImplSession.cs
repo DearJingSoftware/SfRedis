@@ -13,6 +13,11 @@ namespace SfRedis.Sessions
             throw new NotImplementedException();
         }
 
+        public void Command(string text)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Connect()
         {
             throw new NotImplementedException();
@@ -34,6 +39,11 @@ namespace SfRedis.Sessions
         }
 
         public void DisConnect(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<string> History()
         {
             throw new NotImplementedException();
         }

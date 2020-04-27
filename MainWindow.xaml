@@ -27,10 +27,10 @@
                             <ControlTemplate>
                                 <Border>
                                     <Rectangle Margin="0,0,0,0"
-             StrokeThickness="5"
-             Stroke="Black"
-             StrokeDashArray="1 2"
-             Opacity="0"/>
+                                     StrokeThickness="5"
+                                     Stroke="Black"
+                                     StrokeDashArray="1 2"
+                                     Opacity="0"/>
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -91,8 +91,7 @@
                                         <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
                                     </MultiTrigger>
                                     <Trigger Property="IsSelected" Value="true">
-                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                      
                                     </Trigger>
                                     <MultiTrigger>
                                         <MultiTrigger.Conditions>
@@ -113,9 +112,18 @@
             </TreeView.Resources>
             <TreeView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                         <Image Source="pack://application:,,/Images/redis.ico"></Image>
-                        <TreeViewItem Header="{Binding Path=Name}" MouseDoubleClick="TreeViewItem_MouseDoubleClick"></TreeViewItem>
+                        <TreeViewItem Header="{Binding Path=Name}" MouseDoubleClick="TreeViewItem_MouseDoubleClick">
+                            <TreeViewItem Header="111">
+                                <TreeViewItem Header="1122">
+                                </TreeViewItem>
+                                <TreeViewItem Header="1133">
+                                </TreeViewItem>
+                            </TreeViewItem>
+                            <TreeViewItem Header="222">
+                            </TreeViewItem>
+                        </TreeViewItem>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.ItemTemplate>
@@ -201,5 +209,10 @@
                 <TextBox VerticalContentAlignment="Center" Name="RedisCommandInput" Grid.Column="1" TextWrapping="Wrap" Text="" TextChanged="RedisCommandInput_TextChanged"  KeyDown="RedisCommandExec_KeyDown" VerticalAlignment="Bottom" Height="25" Width="240"/>
             </StatusBarItem>
         </StatusBar>
+        <TreeView Grid.Column="1" HorizontalAlignment="Left" Height="106" Margin="91,63,0,0" Grid.Row="1" VerticalAlignment="Top" Width="198">
+            <TreeViewItem Header="TreeViewItem" Height="123" Width="229" IsExpanded="True">
+                <TreeViewItem Header="TreeViewItem" HorizontalAlignment="Left" Height="100" Width="210"/>
+            </TreeViewItem>
+        </TreeView>
     </Grid>
 </Window>

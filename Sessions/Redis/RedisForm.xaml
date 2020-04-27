@@ -18,7 +18,7 @@
             <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=DB}"/>
             <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Password}"/>
         </StackPanel>
-        <Button Content="保存" HorizontalAlignment="Left" Margin="215,56,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Save_Click" Height="19"/>
-        <Button Content="关闭" HorizontalAlignment="Left" Margin="302,58,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Close_Click" Height="19"/>
+        <Button Content="保存" HorizontalAlignment="Left" Margin="458,89,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Save_Click" Height="19"/>
+        <Button Content="关闭" HorizontalAlignment="Left" Margin="545,89,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Close_Click" Height="19"/>
     </Grid>
 </Window>
