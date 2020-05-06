@@ -265,6 +265,24 @@ namespace SfRedis
             ((SfRedis.Sessions.RedisSession)(((StackPanel)sender).DataContext)).Connect();
         }
 
-        
+        private void TreeViewItem_Key_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+           MessageBox.Show(((SfRedis.Sessions.SfRedisKey)(((TreeViewItem)sender).DataContext)).Name);
+        }
+
+        private void Menu_Keys_Refresh(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void Menu_Keys_Remove(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result2 = System.Windows.MessageBox.Show("确认删除?", "确认", MessageBoxButton.OKCancel);
+            if (result2.Equals(MessageBoxResult.OK))
+            {
+                SfRedis.Sessions.SfRedisKey key = ((SfRedis.Sessions.SfRedisKey)(((System.Windows.Controls.MenuItem)sender).DataContext));
+                key.Session.Command("del " + key.Name);
+                key.Session.Refresh(key.Session);
+            }
+        }
     }
 }

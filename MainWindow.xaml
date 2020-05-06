@@ -119,23 +119,24 @@
                         </TreeViewItem>
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="断开"/>
-                                <MenuItem Header="重连"/>
-                                
-                                <MenuItem Header="新增"/>
-                                <MenuItem Header="删除" Click="Redis_Session_Delete"/>
+                                <MenuItem Header="断开" />
+                                <MenuItem Header="重连"  />
+                                <MenuItem Header="新增"  Click="Button_Redis_New" />
+                                <MenuItem Header="删除"  Click="Redis_Session_Delete"/>
                                 <MenuItem Header="重命名"/>
                                 <MenuItem Header="复制为..."/>
                                 <MenuItem Header="刷新"/>
+                                <MenuItem Header="执行脚本..."/>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=.}"   DataType = "{x:Type local:SfRedisKey}" >
-                    <TreeViewItem Header="{Binding Path=Name}">
+                    <TreeViewItem Header="{Binding Path=Name}" MouseDoubleClick="TreeViewItem_Key_MouseDoubleClick" >
                         <TreeViewItem.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="刷新"/>
+                                <MenuItem Header="刷新" Click="Menu_Keys_Refresh"/>
+                                <MenuItem Header="删除"  Click="Menu_Keys_Remove"/>
                             </ContextMenu>
                         </TreeViewItem.ContextMenu>
                     </TreeViewItem>

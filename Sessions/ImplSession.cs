@@ -13,10 +13,8 @@ namespace SfRedis.Sessions
             throw new NotImplementedException();
         }
 
-        public void Command(string text)
-        {
-            throw new NotImplementedException();
-        }
+        virtual public void Command(string text) { }
+
 
         public void Connect()
         {
@@ -62,9 +60,13 @@ namespace SfRedis.Sessions
             throw new NotImplementedException();
         }
 
+        virtual public void Refresh(Session session) { }
+
         public void WriteLog(string log)
         {
             throw new NotImplementedException();
         }
+
+        public virtual void GetConnect() { }
     }
 }

@@ -32,5 +32,8 @@ namespace SfRedis
 
         //获取执行历史
         List<String> History();
+        void Refresh(Session session);
+
+        void GetConnect();
     }
 }
