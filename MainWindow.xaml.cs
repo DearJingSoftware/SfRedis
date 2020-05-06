@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using System.Windows.Interop;
 
 namespace SfRedis
 {
@@ -101,10 +102,6 @@ namespace SfRedis
             return redisResult;
         }
 
-        private void SessionTreeItemMouseDoubleClick(object sender, RoutedEventArgs e)
-        {
-            //MessageBox.Show("双击");
-        }
         /// <summary>
         /// 连接
         /// </summary>
@@ -256,9 +253,18 @@ namespace SfRedis
             redission.Create();
         }
 
+        private void Redis_Session_Delete(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result2 = System.Windows.MessageBox.Show("确认删除?","确认",MessageBoxButton.OKCancel);
+            if(result2.Equals(MessageBoxResult.OK))
+            sessions.Remove((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.MenuItem)sender).DataContext));
+        }
+
         private void TreeViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ((SfRedis.Sessions.RedisSession)(((TreeViewItem)sender).DataContext)).Connect();
+            ((SfRedis.Sessions.RedisSession)(((StackPanel)sender).DataContext)).Connect();
         }
+
+        
     }
 }

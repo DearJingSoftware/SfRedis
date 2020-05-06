@@ -43,6 +43,10 @@ namespace SfRedis.Sessions
             throw new NotImplementedException();
         }
 
+        virtual public string GetIdentifier() {
+            return "";
+        }
+
         public List<string> History()
         {
             throw new NotImplementedException();

@@ -9,6 +9,7 @@ namespace SfRedis
 {
     public interface Session
     {
+        string GetIdentifier();
         void Create();
 
         void Connect();

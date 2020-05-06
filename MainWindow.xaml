@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SfRedis"
+        xmlns:local="clr-namespace:SfRedis.Sessions"
         mc:Ignorable="d"
         Title="SfRedis" Height="600" Width="1160">
     <Grid>
@@ -91,7 +91,7 @@
                                         <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
                                     </MultiTrigger>
                                     <Trigger Property="IsSelected" Value="true">
-                                      
+
                                     </Trigger>
                                     <MultiTrigger>
                                         <MultiTrigger.Conditions>
@@ -109,29 +109,38 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </TreeView.Resources>
-            <TreeView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                        <Image Source="pack://application:,,/Images/redis.ico"></Image>
-                        <TreeViewItem Header="{Binding Path=Name}" MouseDoubleClick="TreeViewItem_MouseDoubleClick">
-                            <TreeViewItem Header="111">
-                                <TreeViewItem Header="1122">
-                                </TreeViewItem>
-                                <TreeViewItem Header="1133">
-                                </TreeViewItem>
-                            </TreeViewItem>
-                            <TreeViewItem Header="222">
-                            </TreeViewItem>
+
+
+                <HierarchicalDataTemplate  ItemsSource="{Binding Path=Keys}"  DataType    = "{x:Type local:RedisSession}">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"  MouseRightButtonDown="TreeViewItem_MouseDoubleClick">
+                        <Image Source="pack://application:,,/Images/redis.ico" ></Image>
+                        <TreeViewItem Header="{Binding Path=Name}">
+                          
                         </TreeViewItem>
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="断开"/>
+                                <MenuItem Header="重连"/>
+                                
+                                <MenuItem Header="新增"/>
+                                <MenuItem Header="删除" Click="Redis_Session_Delete"/>
+                                <MenuItem Header="重命名"/>
+                                <MenuItem Header="复制为..."/>
+                                <MenuItem Header="刷新"/>
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                     </StackPanel>
-                </DataTemplate>
-            </TreeView.ItemTemplate>
-            <TreeView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="新增"/>
-                </ContextMenu>
-            </TreeView.ContextMenu>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Path=.}"   DataType = "{x:Type local:SfRedisKey}" >
+                    <TreeViewItem Header="{Binding Path=Name}">
+                        <TreeViewItem.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="刷新"/>
+                            </ContextMenu>
+                        </TreeViewItem.ContextMenu>
+                    </TreeViewItem>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
         </TreeView>
         <TextBox Grid.Column="1" Margin="5,0,0,0" Grid.Row="1" TextWrapping="Wrap"   Name="RedisResult"  
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -206,13 +215,8 @@
                 <Label Content="version:v0.1" Width="87"/>
             </StatusBarItem>
             <StatusBarItem>
-                <TextBox VerticalContentAlignment="Center" Name="RedisCommandInput" Grid.Column="1" TextWrapping="Wrap" Text="" TextChanged="RedisCommandInput_TextChanged"  KeyDown="RedisCommandExec_KeyDown" VerticalAlignment="Bottom" Height="25" Width="240"/>
+                <TextBox VerticalContentAlignment="Center" Name="RedisCommandInput" Grid.Column="1" TextWrapping="Wrap" Text="" TextChanged="RedisCommandInput_TextChanged"  KeyDown="RedisCommandExec_KeyDown" VerticalAlignment="Bottom" Height="21" Width="240"/>
             </StatusBarItem>
         </StatusBar>
-        <TreeView Grid.Column="1" HorizontalAlignment="Left" Height="106" Margin="91,63,0,0" Grid.Row="1" VerticalAlignment="Top" Width="198">
-            <TreeViewItem Header="TreeViewItem" Height="123" Width="229" IsExpanded="True">
-                <TreeViewItem Header="TreeViewItem" HorizontalAlignment="Left" Height="100" Width="210"/>
-            </TreeViewItem>
-        </TreeView>
     </Grid>
 </Window>

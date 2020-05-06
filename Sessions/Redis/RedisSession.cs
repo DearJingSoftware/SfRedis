@@ -3,28 +3,34 @@ using StackExchange.Redis;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Security.Policy;
 using System.Windows.Input;
 
 namespace SfRedis.Sessions
 {
+    class SfRedisKey
+    {
+        String _Name = "";
+        public string Name { get => _Name; set => _Name = value; }
+    }
     class RedisSession : ImplSession
     {
-        String _Name="localhost";
-        
-        String _Host="localhost";
-        
-        String _Port="6379";
-        
+        String _Name = "localhost";
+
+        String _Host = "localhost";
+
+        String _Port = "6379";
+
         String _DB;
 
         String _Password;
 
-        Dictionary<String,Object> ctx=new Dictionary<string, object>();
+        Dictionary<String, Object> ctx = new Dictionary<string, object>();
 
         IDatabase db;
 
-        List<String> _Keys=new List<string>();
+        ObservableCollection<SfRedisKey> _Keys = new ObservableCollection<SfRedisKey>();
 
         ResultType ctxType;
 
@@ -36,23 +42,25 @@ namespace SfRedis.Sessions
         public string Name { get => _Name; set => _Name = value; }
         public string DB { get => _DB; set => _DB = value; }
         public string Password { get => _Password; set => _Password = value; }
-        public List<string> Keys { get => _Keys; set => _Keys = value; }
+        public ObservableCollection<SfRedisKey> Keys { get => _Keys; set => _Keys = value; }
 
-        new public void Connect() {
+        new public void Connect()
+        {
             MainWindow.ctxSession = this;
-            var  redis = ConnectionMultiplexer.Connect(Host);
+            var redis = ConnectionMultiplexer.Connect(Host);
             //当前db
             db = redis.GetDatabase();
             string[] argv = { "*" };
             var res = db.Execute("keys", argv);
+            Keys.Clear();
             foreach (KeyValuePair<string, RedisResult> entry in res.ToDictionary())
             {
-                Keys.Add(entry.Value.ToString());
+                Keys.Add(new SfRedisKey { Name = entry.Value.ToString() });
             }
 
             //当前执行结果
-            ctx["db"]= db;
-            ctx["ctxResult"]=ctxResult;
+            ctx["db"] = db;
+            ctx["ctxResult"] = ctxResult;
         }
 
         new public void Create()
@@ -73,6 +81,12 @@ namespace SfRedis.Sessions
             string[] args = text.Split(' ');
             string[] arg1 = SubArray(args, 1, args.Length - 1);
             ctxResult = db.Execute(args[0], arg1);
+        }
+
+
+        override  public string GetIdentifier()
+        {
+            return Name;
         }
 
 

@@ -137,3 +137,4 @@ C:\Users\Admin\source\repos\SfRedis\obj\Debug\SfRedis.csprojAssemblyReference.ca
 C:\Users\Admin\source\repos\SfRedis\obj\Debug\SfRedis.csproj.CoreCompileInputs.cache
 C:\Users\Admin\source\repos\SfRedis\obj\Debug\Sessions\Redis\RedisForm.g.cs
 C:\Users\Admin\source\repos\SfRedis\obj\Debug\Sessions\Redis\RedisForm.baml
+C:\Users\Admin\source\repos\SfRedis\obj\Debug\GeneratedInternalTypeHelper.g.cs
