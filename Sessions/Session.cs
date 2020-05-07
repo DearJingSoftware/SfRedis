@@ -14,9 +14,9 @@ namespace SfRedis
 
         void Connect();
 
-        void DisConnect(string v);
+        void DisConnect();
 
-        void ReConnect(string v);
+        void ReConnect();
         
         void WriteLog(string log);
 

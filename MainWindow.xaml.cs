@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Interop;
 
 namespace SfRedis
@@ -47,18 +48,22 @@ namespace SfRedis
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            RedisHostConnect.IsEnabled = true;
-            RedisHostDisconnect.IsEnabled = false;
+
+            sessions.CollectionChanged += Sessions_CollectionChanged;
             this.SessionTree.ItemsSource = sessions;
 
         }
+
+        private void Sessions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //MessageBox.Show("更新数据");
+        }
+
         /// <summary>
         /// 断开连接
         /// </summary>
         private void Button_Redis_Disconnect(object sender, RoutedEventArgs e)
         {
-            RedisHostConnect.IsEnabled = true;
-            RedisHostDisconnect.IsEnabled = false;
             redis.CloseAsync();
         }
 
@@ -107,62 +112,6 @@ namespace SfRedis
         /// </summary>
         private void Button_Redis_Connect(object sender, RoutedEventArgs e)
         {
-
-
-            //try
-            //{
-            //    var log = new MainWindow.TextWriter1();
-            //    log.textBlock = SessionLog;
-            ConfigurationOptions configurationOptions = new ConfigurationOptions();
-            configurationOptions.ReconnectRetryPolicy = new LinearRetry(5000);
-
-
-            redis = ConnectionMultiplexer.Connect(RedisHost.Text);
-            db = redis.GetDatabase();
-            RedisHostConnect.IsEnabled = false;
-            RedisHostDisconnect.IsEnabled = true;
-
-            //    TreeViewItem a = new TreeViewItem();
-
-            //    StackPanel stack = new StackPanel();
-            //    stack.Orientation = Orientation.Horizontal;
-
-            //    // create Image
-            //    Image image = new Image();
-            //    image.Source = new BitmapImage
-            //        (new Uri("pack://application:,,/Images/redis.ico"));
-            //    image.Width = 16;
-            //    image.Height = 16;
-            //    // Label
-            //    Label lbl = new Label();
-            //    lbl.Content = RedisHost.Text;
-
-
-            //    // Add into stack
-            //    stack.Children.Add(image);
-            //    stack.Children.Add(lbl);
-            //    a.Header = stack;
-
-            //    //增加
-            //    //获取全部的key
-            //    string[] argv = { "*" };
-            //    var redisResult = db.Execute("keys", argv);
-
-            //    foreach (KeyValuePair<string, RedisResult> entry in redisResult.ToDictionary())
-            //    {
-
-            //        TreeViewItem KeyItem = new TreeViewItem();
-            //        KeyItem.Header = entry.Value;
-            //        KeyItem.MouseDoubleClick += KeyItemMouseDoubleClick;
-            //        a.Items.Add(KeyItem);
-            //    }
-            //    SessionTree.Items.Add(a);
-            //}
-            //catch (Exception ex)
-            //{
-            //    SessionLog.Text = ex.Message.ToString();
-            //}
-
 
         }
 
@@ -283,6 +232,43 @@ namespace SfRedis
                 key.Session.Command("del " + key.Name);
                 key.Session.Refresh(key.Session);
             }
+        }
+
+        private void App_Exit(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Redis_Session_Disconnect(object sender, RoutedEventArgs e)
+        {
+            ((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.MenuItem)sender).DataContext)).DisConnect();
+            CollectionViewSource.GetDefaultView(sessions).Refresh();
+
+        }
+
+        private void Redis_Session_ReConnect(object sender, RoutedEventArgs e)
+        {
+            ((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.MenuItem)sender).DataContext)).ReConnect();
+            CollectionViewSource.GetDefaultView(sessions).Refresh();
+        }
+
+        private void Redis_Session_Connect(object sender, RoutedEventArgs e)
+        {
+            ((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.MenuItem)sender).DataContext)).Connect();
+            CollectionViewSource.GetDefaultView(sessions).Refresh();
+        }
+
+        private void Redis_Session_Connect(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //if (e.ClickCount == 2)
+            //{
+            //    ((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.StackPanel)sender).DataContext)).Connect();
+            //    CollectionViewSource.GetDefaultView(sessions).Refresh();
+               
+            //}
+            //e.Handled = false;
+
+
         }
     }
 }

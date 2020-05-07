@@ -48,28 +48,29 @@
                             <ControlTemplate TargetType="{x:Type TreeViewItem}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="10"/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="5"/>
                                         <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                                       
+                                   </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Border Name="Bd"
-                              Grid.Column="1"                                
-                              Background="{TemplateBinding Background}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              BorderThickness="{TemplateBinding BorderThickness}"
-                              Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter x:Name="PART_Header"
-                                        ContentSource="Header"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                                    </Border>
+                                          Grid.Column="1"                                
+                                          Background="{TemplateBinding Background}"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter x:Name="PART_Header"
+                                                                    HorizontalAlignment="Stretch"
+                                                                    ContentSource="Header"
+                                                    />
+                                                </Border>
                                     <ItemsPresenter x:Name="ItemsHost"
-                          Grid.Row="1"
-                          Grid.Column="1"
-                          Grid.ColumnSpan="2"/>
+                                      Grid.Row="1"
+                                      Grid.Column="1"
+                                      Grid.ColumnSpan="2"/>
                                 </Grid>
 
                                 <ControlTemplate.Triggers>
@@ -112,15 +113,31 @@
 
 
                 <HierarchicalDataTemplate  ItemsSource="{Binding Path=Keys}"  DataType    = "{x:Type local:RedisSession}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"  MouseRightButtonDown="TreeViewItem_MouseDoubleClick">
-                        <Image Source="pack://application:,,/Images/redis.ico" ></Image>
-                        <TreeViewItem Header="{Binding Path=Name}">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" MouseRightButtonDown="TreeViewItem_MouseDoubleClick"  MouseLeftButtonDown="Redis_Session_Connect">
+                        <Image>
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}">
+                                    <Setter Property="Source" Value="pack://application:,,/Images/redis_disconnect.ico"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                            <Setter Property="Source" Value="pack://application:,,/Images/redis_connect.ico"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                              
+                            </Image.Style>
+
+                        </Image>
+                        <Label Content="{Binding Path=Name}"></Label>
+                        <!--<TreeViewItem Header="{Binding Path=Name}" HorizontalAlignment="Stretch">
                           
-                        </TreeViewItem>
+                        </TreeViewItem>-->
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="断开" />
-                                <MenuItem Header="重连"  />
+                                <MenuItem Header="连接"  Click="Redis_Session_Connect" />
+                                <MenuItem Header="断开" Click="Redis_Session_Disconnect"/>
+                                <MenuItem Header="重连"  Click="Redis_Session_ReConnect" />
+                                
                                 <MenuItem Header="新增"  Click="Button_Redis_New" />
                                 <MenuItem Header="删除"  Click="Redis_Session_Delete"/>
                                 <MenuItem Header="重命名"/>
@@ -163,26 +180,8 @@
         </TextBox>
         <Menu Height="20" Margin="0,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem Header="连接">
-                <MenuItem Header="新建" />
-                <MenuItem Header="删除" />
-                <MenuItem Header="修改" />
-                <MenuItem Header="复制" />
-                <MenuItem Header="退出" />
-            </MenuItem>
-            <MenuItem Header="当前">
-                <MenuItem Header="连接" />
-                <MenuItem Header="断开" />
-                <MenuItem Header="重连" />
-            </MenuItem>
-            <MenuItem Header="Key">
-                <MenuItem Header="删除" />
-                <MenuItem Header="断开" />
-                <MenuItem Header="重连" />
-            </MenuItem>
-            <MenuItem Header="窗口">
-                <MenuItem Header="连接" />
-                <MenuItem Header="断开" />
-                <MenuItem Header="复位" />
+                <MenuItem Header="新建"  Click="Button_Redis_New"/>
+                <MenuItem Header="退出"  Click="App_Exit"/>
             </MenuItem>
             <MenuItem Header="帮助">
                 <MenuItem Header="关于" />
@@ -193,21 +192,6 @@
         <ToolBar Grid.ColumnSpan="2" Height="38" Margin="0,19,0,0" VerticalAlignment="Top">
             <ToolBarPanel Height="30" VerticalAlignment="Top" Width="58">
                 <Button Content="新建"  x:Name="RedisHostNew"   Margin="5 0"  HorizontalAlignment="Left" Width="48" Click="Button_Redis_New" Height="30" VerticalAlignment="Bottom"/>
-            </ToolBarPanel>
-            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="150">
-                <TextBox VerticalContentAlignment="Center" x:Name="RedisHost" Margin="5,0,-5,0" Text="localhost"  TextWrapping="Wrap" Height="30" VerticalAlignment="Bottom"/>
-            </ToolBarPanel>
-            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="150">
-                <TextBox VerticalContentAlignment="Center" x:Name="RedisPassword" Margin="8,0" Text=""  TextWrapping="Wrap" Height="30" VerticalAlignment="Bottom"/>
-            </ToolBarPanel>
-            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="48">
-                <Button Content="连接"  x:Name="RedisHostConnect"    HorizontalAlignment="Left" Width="48" Click="Button_Redis_Connect" Height="30" VerticalAlignment="Bottom"/>
-            </ToolBarPanel>
-            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="48">
-                <Button Content="断开"  x:Name="RedisHostDisconnect" HorizontalAlignment="Left"  Width="48" Click="Button_Redis_Disconnect" Height="30" VerticalAlignment="Bottom"/>
-            </ToolBarPanel>
-            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="48">
-                <Button Content="重连"  x:Name="RedisHostReconnect" HorizontalAlignment="Left"  Width="48" Click="Button_Redis_Disconnect" Height="30" VerticalAlignment="Bottom"/>
             </ToolBarPanel>
         </ToolBar>
 

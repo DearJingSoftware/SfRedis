@@ -198,5 +198,17 @@
   <ItemGroup>
     <Resource Include="Images\redis.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\redis_connect.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\redis_disconnect.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\redis_connect.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\redis_disconnect.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

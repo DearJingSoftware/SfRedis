@@ -22,6 +22,9 @@ namespace SfRedis.Sessions
     }
     class RedisSession : ImplSession
     {
+
+        Boolean _IsConnected = false;
+
         String _Name = "localhost";
 
         String _Host = "localhost";
@@ -50,30 +53,30 @@ namespace SfRedis.Sessions
         public string Password { get => _Password; set => _Password = value; }
 
         private ConnectionMultiplexer conn;
+        private IServer _Server;
         public ObservableCollection<SfRedisKey> Keys { get => _Keys; set => _Keys = value; }
         public ConnectionMultiplexer Conn { get => conn; set => conn = value; }
+        public IServer Server { get => _Server; set => _Server = value; }
+        public bool IsConnected { get => _IsConnected; set => _IsConnected = value; }
 
         new public void Connect()
         {
             MainWindow.ctxSession = this;
-            conn = ConnectionMultiplexer.Connect(Host);
-            //当前db
-            db = conn.GetDatabase();
-            string[] argv = { "*" };
-            RedisResult res = db.Execute("keys", argv);
-
-
-            var server = conn.GetServer("localhost:6379");
+            Conn = ConnectionMultiplexer.Connect(Host+":"+Port);
+            IsConnected = Conn.IsConnected;
+            Server = conn.GetServer(Host, int.Parse(Port));
             Keys.Clear();
-            foreach (var entry in server.Keys(pattern:"*"))
+            foreach (var entry in Server.Keys(pattern:"*"))
             {
                 Keys.Add(new SfRedisKey { Name = entry, Session=this });
             }
+
 
             //当前执行结果
             ctx["db"] = db;
             ctx["ctxResult"] = ctxResult;
         }
+
 
         new public void Create()
         {
@@ -90,7 +93,6 @@ namespace SfRedis.Sessions
 
         override public void Command(string text)
         {
-            MessageBox.Show(text);
             string[] args = text.Split(' ');
             string[] arg1 = SubArray(args, 1, args.Length - 1);
             ctxResult = db.Execute(args[0], arg1);
@@ -104,12 +106,28 @@ namespace SfRedis.Sessions
 
         override public void Refresh(Session session)
         {
-            var server = conn.GetServer("localhost:6379");
+            
             Keys.Clear();
-            foreach (var entry in server.Keys(pattern: "*"))
+            foreach (var entry in Server.Keys(pattern: "*"))
             {
                 Keys.Add(new SfRedisKey { Name = entry, Session = this });
             }
+        }
+
+        override public void DisConnect()
+        {
+            Conn.Close();
+            Keys.Clear();
+            IsConnected = Conn.IsConnected;
+            MessageBox.Show(conn.IsConnected.ToString());
+        }
+
+        override public void ReConnect()
+        {
+            if (Conn.IsConnected) {
+                Conn.Close();
+            }
+            Connect();
         }
 
 

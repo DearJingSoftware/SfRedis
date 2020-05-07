@@ -36,9 +36,9 @@ namespace SfRedis.Sessions
             throw new NotImplementedException();
         }
 
-        public void DisConnect(string v)
+        virtual public void DisConnect()
         {
-            throw new NotImplementedException();
+          
         }
 
         virtual public string GetIdentifier() {
@@ -55,9 +55,8 @@ namespace SfRedis.Sessions
             throw new NotImplementedException();
         }
 
-        public void ReConnect(string v)
+        virtual public void ReConnect()
         {
-            throw new NotImplementedException();
         }
 
         virtual public void Refresh(Session session) { }
