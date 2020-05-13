@@ -1,0 +1,26 @@
+﻿<Window x:Class="SfRedis.Windows.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SfRedis"
+        mc:Ignorable="d"
+        Title="About" Height="450" Width="580" Topmost="True" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <StackPanel Margin="10px">
+        <TextBlock TextWrapping="Wrap" Text="Sfigure Redis Management Tools" Margin="0px 10px" FontSize="32"/>
+        <WrapPanel>
+            <Label>version:v 0.0.1</Label>
+            <Button Margin="5px" Padding="10px 0px" Click="Button_Click">Check</Button>
+        </WrapPanel>
+        <Image Height="40" Margin="0,0,-0.4,0" HorizontalAlignment="Left" >
+            <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                    <Setter Property="Source" Value="pack://application:,,/logo.ico"/>
+                </Style>
+            </Image.Style>
+        </Image>
+        <TextBlock Margin="0px 40px 0px 0px" Text="Copyright @2020 Dearjing.com"/>
+
+        
+    </StackPanel>
+</Window>

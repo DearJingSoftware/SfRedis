@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace SfRedis
 {
-    public interface Session
+  
+    public interface Session 
     {
         string GetIdentifier();
         void Create();

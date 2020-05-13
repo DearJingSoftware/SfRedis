@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SfRedis.Sessions.Redis
 {
@@ -34,11 +24,34 @@ namespace SfRedis.Sessions.Redis
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            int count= MainWindow.sessions.Where(x => x.GetIdentifier().Equals(redisSession.Name)).Count();
+            if (count > 0) {
+                MessageBox.Show("名称不能重复");
+                return;
+            }
             MainWindow.sessions.Add(redisSession);
             //当前连接
             MainWindow.ctxSession = redisSession;
             redisSession.Connect();
             this.Close();
+        }
+
+        void AsyncCallback() { 
+        }
+        private void Test_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                redisSession.Connect();
+                if (redisSession.IsConnected)
+                {
+                    MessageBox.Show("连接成功");
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show("连接异常"+ex.Message);
+            }
+          
         }
     }
 }

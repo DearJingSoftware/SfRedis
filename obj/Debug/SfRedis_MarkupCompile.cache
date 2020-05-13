@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\94562\source\repos\Sfredis\App.xaml
-2279731976
+62063749928
 
-9-2099816676
+14-652996491
 134-1400044422
-MainWindow.xaml;Sessions\Redis\RedisForm.xaml;
+Layouts\UserControlMenu.xaml;Layouts\UserControlStatus.xaml;MainWindow.xaml;Sessions\Redis\RedisForm.xaml;Windows\About.xaml;Windows\License.xaml;
 
 False
 

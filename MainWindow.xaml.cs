@@ -5,12 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Interop;
+using SfRedis.Windows;
 
 namespace SfRedis
 {
@@ -72,7 +71,7 @@ namespace SfRedis
             TreeViewItem target = (TreeViewItem)sender;
             String key = target.Header.ToString();
             RedisResult redisResult = FetchKey(key);
-            ParseResult(redisResult);
+            
         }
 
         private RedisResult FetchKey(string key)
@@ -138,61 +137,11 @@ namespace SfRedis
 
         }
 
-        private void ParseResult(RedisResult redisResult)
-        {
-            RedisResult.Text = "";
-            switch (redisResult.Type)
-            {
-                case ResultType.BulkString:
-                    {
-                        RedisResult.Text = redisResult.ToString();
-                        break;
-                    }
-                case ResultType.SimpleString:
-                    {
-                        RedisResult.Text = redisResult.ToString();
-                        break;
-                    }
-                case ResultType.MultiBulk:
-                    {
-                        foreach (KeyValuePair<string, RedisResult> entry in redisResult.ToDictionary())
-                        {
-                            RedisResult.Text = RedisResult.Text + "\n" + entry.Key + ":" + entry.Value;
-                        }
-
-                        break;
-                    }
-                case ResultType.Integer:
-                    {
-                        RedisResult.Text = redisResult.ToString();
-                        break;
-                    }
-                case ResultType.Error:
-                    {
-                        RedisResult.Text = redisResult.ToString();
-                        break;
-                    }
-                case ResultType.None:
-                    {
-                        RedisResult.Text = "没有返回值";
-                        break;
-                    }
-            }
-        }
+       
 
         private void RedisCommandExec_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.Return)
-            {
-                try
-                {
-                    ((RedisSession)ctxSession).Command(RedisCommandInput.Text);
-                }
-                catch (Exception ex)
-                {
-                    SessionLog.Text = ex.Message.ToString();
-                }
-            }
+           
         }
 
         private void Button_Redis_New(object sender, RoutedEventArgs e)
@@ -252,7 +201,7 @@ namespace SfRedis
             CollectionViewSource.GetDefaultView(sessions).Refresh();
         }
 
-        private void Redis_Session_Connect(object sender, RoutedEventArgs e)
+        private void Click_Redis_Session_Connect(object sender, RoutedEventArgs e)
         {
             ((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.MenuItem)sender).DataContext)).Connect();
             CollectionViewSource.GetDefaultView(sessions).Refresh();
@@ -260,15 +209,65 @@ namespace SfRedis
 
         private void Redis_Session_Connect(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //if (e.ClickCount == 2)
-            //{
-            //    ((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.StackPanel)sender).DataContext)).Connect();
-            //    CollectionViewSource.GetDefaultView(sessions).Refresh();
-               
-            //}
+            if (e.ClickCount == 2)
+            {
+                ((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.StackPanel)sender).DataContext)).Connect();
+                CollectionViewSource.GetDefaultView(sessions).Refresh();
+
+            }
+            else
+            {
+                ctxSession = ((SfRedis.Sessions.RedisSession)(((System.Windows.Controls.StackPanel)sender).DataContext));
+                // MessageBox.Show(ctxSession.GetIdentifier());
+            }
             //e.Handled = false;
 
 
+        }
+
+        private void Redis_Session_DB_Switch(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Redis_Session_Copy(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Redis_Session_Rename(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Redis_Session_Exec(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Redis_Session_Refresh(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Redis_Search(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void About_Windows(object sender, RoutedEventArgs e)
+        { 
+            new About().Show();
+        }
+
+        private void Check_Refresh_Windows(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void License_Windows(object sender, RoutedEventArgs e)
+        {
+            new License().Show();
         }
     }
 }

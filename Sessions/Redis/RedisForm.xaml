@@ -5,20 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SfRedis.Sessions.Redis"
         mc:Ignorable="d"
-        Title="RedisForm" Height="450" Width="800">
-    <Grid>
+        Title="Redis" Height="450" Width="580" Topmost="True" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Margin="10,0,10,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="214*"/>
-            <RowDefinition Height="205*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel Margin="0,0,0,0">
-            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Name}"/>
-            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Host}"/>
-            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Port}"/>
-            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=DB}"/>
-            <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Password}"/>
+        <TabControl Margin="0,0,0,0">
+            <TabItem Header="基础">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel Margin="0,0,-0.6,0" Grid.RowSpan="2">
+                        <TextBlock Text="名称:" Margin="0,5"/>
+                        <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Name}" VerticalAlignment="Center" Margin="0,0,372.8,0" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="地址:" Margin="0,5"/>
+                        <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Host}" VerticalAlignment="Center" Margin="0,0,372.8,0" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="端口:" Margin="0,5,372.8,5"/>
+                        <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Port}" VerticalAlignment="Center" Margin="0,0,473.8,0" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="高级">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel Margin="0,0,-0.6,0" Grid.RowSpan="2">
+                        <TextBlock Text="数据库:" Margin="0,5"/>
+                        <TextBox Height="23" TextWrapping="Wrap" Text="{Binding DB}" VerticalAlignment="Center" Margin="0,0,457.2,0"/>
+                        <TextBlock Text="密码:" Margin="0,5"/>
+                        <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Path=Password}" VerticalAlignment="Center" Margin="0,0,363.6,0"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Margin="0,0,0,0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="测试连接" HorizontalAlignment="Left"  Click="Test_Click"  Height="30" Margin="0,0,20,0" Padding="10,0,10,0"/>
+            <Button Content="保存" HorizontalAlignment="Left"  Click="Save_Click" Height="30" Margin="0,0,20,0" Padding="10,0,10,0"/>
+            <Button Content="关闭" HorizontalAlignment="Left"  Click="Close_Click" Height="30" Margin="0,0,0,0" Padding="10,0,10,0"/>
         </StackPanel>
-        <Button Content="保存" HorizontalAlignment="Left" Margin="458,89,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Save_Click" Height="19"/>
-        <Button Content="关闭" HorizontalAlignment="Left" Margin="545,89,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Close_Click" Height="19"/>
+
     </Grid>
 </Window>

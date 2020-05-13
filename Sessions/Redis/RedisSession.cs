@@ -4,8 +4,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Policy;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -20,7 +22,9 @@ namespace SfRedis.Sessions
         public string Name { get => _Name; set => _Name = value; }
         public Session Session { get => _Session; set => _Session = value; }
     }
+
     class RedisSession : ImplSession
+        //,INotifyPropertyChanged
     {
 
         Boolean _IsConnected = false;
@@ -31,13 +35,11 @@ namespace SfRedis.Sessions
 
         String _Port = "6379";
 
-        String _DB;
+        String _DB="0";
 
         String _Password;
 
         Dictionary<String, Object> ctx = new Dictionary<string, object>();
-
-        IDatabase db;
 
         ObservableCollection<SfRedisKey> _Keys = new ObservableCollection<SfRedisKey>();
 
@@ -54,6 +56,9 @@ namespace SfRedis.Sessions
 
         private ConnectionMultiplexer conn;
         private IServer _Server;
+
+        //public event PropertyChangedEventHandler PropertyChanged;
+
         public ObservableCollection<SfRedisKey> Keys { get => _Keys; set => _Keys = value; }
         public ConnectionMultiplexer Conn { get => conn; set => conn = value; }
         public IServer Server { get => _Server; set => _Server = value; }
@@ -61,10 +66,13 @@ namespace SfRedis.Sessions
 
         new public void Connect()
         {
+       
             MainWindow.ctxSession = this;
-            Conn = ConnectionMultiplexer.Connect(Host+":"+Port);
+            Conn = ConnectionMultiplexer.Connect(Host + ":" + Port);
             IsConnected = Conn.IsConnected;
             Server = conn.GetServer(Host, int.Parse(Port));
+              
+            
             Keys.Clear();
             foreach (var entry in Server.Keys(pattern:"*"))
             {
@@ -73,7 +81,6 @@ namespace SfRedis.Sessions
 
 
             //当前执行结果
-            ctx["db"] = db;
             ctx["ctxResult"] = ctxResult;
         }
 
@@ -95,7 +102,7 @@ namespace SfRedis.Sessions
         {
             string[] args = text.Split(' ');
             string[] arg1 = SubArray(args, 1, args.Length - 1);
-            ctxResult = db.Execute(args[0], arg1);
+            ctxResult = Server.Execute(args[0], arg1);
         }
 
 

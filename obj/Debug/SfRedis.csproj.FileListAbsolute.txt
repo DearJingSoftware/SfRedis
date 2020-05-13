@@ -278,3 +278,11 @@ C:\Users\94562\source\repos\Sfredis\obj\Debug\SfRedis.csproj.CoreCompileInputs.c
 C:\Users\94562\source\repos\Sfredis\obj\Debug\SfRedis.csproj.CopyComplete
 C:\Users\94562\source\repos\Sfredis\obj\Debug\SfRedis.exe
 C:\Users\94562\source\repos\Sfredis\obj\Debug\SfRedis.pdb
+C:\Users\94562\source\repos\Sfredis\obj\Debug\Windows\About.g.cs
+C:\Users\94562\source\repos\Sfredis\obj\Debug\Windows\License.g.cs
+C:\Users\94562\source\repos\Sfredis\obj\Debug\Windows\About.baml
+C:\Users\94562\source\repos\Sfredis\obj\Debug\Windows\License.baml
+C:\Users\94562\source\repos\Sfredis\obj\Debug\Layouts\UserControlMenu.g.cs
+C:\Users\94562\source\repos\Sfredis\obj\Debug\Layouts\UserControlStatus.g.cs
+C:\Users\94562\source\repos\Sfredis\obj\Debug\Layouts\UserControlMenu.baml
+C:\Users\94562\source\repos\Sfredis\obj\Debug\Layouts\UserControlStatus.baml

@@ -127,12 +127,33 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Layouts\UserControlMenu.xaml.cs">
+      <DependentUpon>UserControlMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Layouts\UserControlStatus.xaml.cs">
+      <DependentUpon>UserControlStatus.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Sessions\ImplSession.cs" />
     <Compile Include="Sessions\Redis\RedisForm.xaml.cs">
       <DependentUpon>RedisForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Sessions\Redis\RedisSession.cs" />
     <Compile Include="Sessions\Session.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Windows\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\License.xaml.cs">
+      <DependentUpon>License.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Layouts\UserControlMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Layouts\UserControlStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -149,6 +170,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\About.xaml" />
+    <Page Include="Windows\License.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -191,24 +214,23 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logo.ico" />
+    <Resource Include="Sessions\Redis\redis_connect.ico" />
+    <Resource Include="Sessions\Redis\redis_connect.jpg" />
+    <Resource Include="Sessions\Redis\redis_disconnect.ico" />
+    <Resource Include="Sessions\Redis\redis_disconnect.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Components\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\redis.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\redis_connect.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\redis_disconnect.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\redis_connect.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\redis_disconnect.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

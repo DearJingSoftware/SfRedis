@@ -5,21 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SfRedis.Sessions"
         mc:Ignorable="d"
-        Title="SfRedis" Height="600" Width="1160">
+        Title="SfRedis" Height="600" Width="1160"
+       >
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="242*"/>
-            <RowDefinition Height="238*"/>
-            <RowDefinition Height="29*"/>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="283*"/>
-            <ColumnDefinition Width="869*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
 
-        <TreeView Grid.Row="1" Name="SessionTree" Grid.RowSpan="2" >
+        <Menu Height="20" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="0"  Grid.ColumnSpan="3" Grid.RowSpan="3" >
+            <MenuItem Header="连接" Height="20">
+                <MenuItem Header="新建"  Click="Button_Redis_New"/>
+                <MenuItem Header="退出"  Click="App_Exit"/>
+            </MenuItem>
+            <MenuItem Header="设置">
+                <MenuItem Header="关于"  Click="About_Windows"/>
+            </MenuItem>
+            <MenuItem Header="帮助">
+                <MenuItem Header="关于"  Click="About_Windows"/>
+                <MenuItem Header="检测更新" Click="Check_Refresh_Windows"/>
+                <MenuItem Header="授权" Click="License_Windows"/>
+            </MenuItem>
+        </Menu>
+        <ToolBar  Height="30" Margin="0,20,-0.4,0" VerticalAlignment="Top"   Grid.ColumnSpan="3" Grid.RowSpan="3">
+            <ToolBarPanel Height="20" VerticalAlignment="Center" Width="60" HorizontalAlignment="Center">
+                <Button Content="新建"  x:Name="RedisHostNew"   Margin="5,0,0,0"  HorizontalAlignment="Left" Width="48" Click="Button_Redis_New" Height="20" VerticalAlignment="Bottom"/>
+            </ToolBarPanel>
+            <ToolBarPanel Height="20"  Margin="0,3,0,2.6" Orientation="Horizontal">
+                <TextBox  Width="100" Text="{Binding ctxSession.Name}"/>
+            </ToolBarPanel>
+            <ToolBarPanel Height="20"  Margin="0,3,0,2.6" Orientation="Horizontal">
+                <TextBox  Width="100"/>
+                <Button Content="搜索"   Margin="5,0,0,0"  HorizontalAlignment="Left" Width="48" Click="Button_Redis_Search" Height="20" VerticalAlignment="Bottom"/>
+            </ToolBarPanel>
+
+        </ToolBar>
+        <TreeView Name="SessionTree"  Grid.Column="0"  Grid.Row="1" >
             <TreeView.Resources>
                 <Style x:Key="TreeViewItemFocusVisual">
                     <Setter Property="Control.Template">
@@ -30,7 +58,7 @@
                                      StrokeThickness="5"
                                      Stroke="Black"
                                      StrokeDashArray="1 2"
-                                     Opacity="0"/>
+                                     Opacity="1"/>
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -50,8 +78,8 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="5"/>
                                         <ColumnDefinition Width="*"/>
-                                       
-                                   </Grid.ColumnDefinitions>
+
+                                    </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition/>
@@ -62,11 +90,11 @@
                                           BorderBrush="{TemplateBinding BorderBrush}"
                                           BorderThickness="{TemplateBinding BorderThickness}"
                                           Padding="{TemplateBinding Padding}">
-                                                    <ContentPresenter x:Name="PART_Header"
+                                        <ContentPresenter x:Name="PART_Header"
                                                                     HorizontalAlignment="Stretch"
                                                                     ContentSource="Header"
                                                     />
-                                                </Border>
+                                    </Border>
                                     <ItemsPresenter x:Name="ItemsHost"
                                       Grid.Row="1"
                                       Grid.Column="1"
@@ -99,8 +127,8 @@
                                             <Condition Property="IsSelected" Value="true"/>
                                             <Condition Property="IsSelectionActive" Value="false"/>
                                         </MultiTrigger.Conditions>
-                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                        <!--<Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>-->
                                     </MultiTrigger>
                                     <Trigger Property="IsEnabled" Value="false">
                                         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -117,33 +145,35 @@
                         <Image>
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="pack://application:,,/Images/redis_disconnect.ico"/>
+                                    <Setter Property="Source" Value="pack://application:,,/Sessions/Redis/redis_disconnect.ico"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                                            <Setter Property="Source" Value="pack://application:,,/Images/redis_connect.ico"/>
+                                            <Setter Property="Source" Value="pack://application:,,/Sessions/Redis/redis_connect.ico"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                              
+
                             </Image.Style>
 
                         </Image>
                         <Label Content="{Binding Path=Name}"></Label>
+                        <!-- <Label Content="{Binding Path=DB}"></Label> -->
                         <!--<TreeViewItem Header="{Binding Path=Name}" HorizontalAlignment="Stretch">
                           
                         </TreeViewItem>-->
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="连接"  Click="Redis_Session_Connect" />
+                                <MenuItem Header="连接"  Click="Click_Redis_Session_Connect" />
                                 <MenuItem Header="断开" Click="Redis_Session_Disconnect"/>
                                 <MenuItem Header="重连"  Click="Redis_Session_ReConnect" />
-                                
+                                <MenuItem Header="数据库..."  Click="Redis_Session_DB_Switch" ></MenuItem>
+                                <MenuItem Header="命令行..."  Click="Redis_Session_DB_Switch" ></MenuItem>
                                 <MenuItem Header="新增"  Click="Button_Redis_New" />
                                 <MenuItem Header="删除"  Click="Redis_Session_Delete"/>
-                                <MenuItem Header="重命名"/>
-                                <MenuItem Header="复制为..."/>
-                                <MenuItem Header="刷新"/>
-                                <MenuItem Header="执行脚本..."/>
+                                <MenuItem Header="重命名" Click="Redis_Session_Rename"/>
+                                <MenuItem Header="刷新"  Click="Redis_Session_Refresh"/>
+                                <MenuItem Header="复制为..."  Click="Redis_Session_Copy"/>
+                                <MenuItem Header="执行脚本..."  Click="Redis_Session_Exec"/>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                     </StackPanel>
@@ -160,48 +190,22 @@
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
         </TreeView>
-        <TextBox Grid.Column="1" Margin="5,0,0,0" Grid.Row="1" TextWrapping="Wrap"   Name="RedisResult"  
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto" >
-            <TextBox.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="清空日志"/>
-                </ContextMenu>
-            </TextBox.ContextMenu>
-        </TextBox>
-        <TextBox Grid.Column="1" Margin="5,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="" x:Name="SessionLog"  
-                             >
-            <TextBox.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="清空日志"/>
-                </ContextMenu>
-            </TextBox.ContextMenu>
+        <GridSplitter   Grid.Column="1"  Grid.Row="1" Width="5" HorizontalAlignment="Stretch" />
+        <TabControl   Grid.Column="2" Grid.Row="1"  >
+            <TabItem Header="Key:USER:111111">
+                11
+            </TabItem>
+            <TabItem  Header="命令行">
+                22
+            </TabItem>
+        </TabControl>
 
-        </TextBox>
-        <Menu Height="20" Margin="0,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
-            <MenuItem Header="连接">
-                <MenuItem Header="新建"  Click="Button_Redis_New"/>
-                <MenuItem Header="退出"  Click="App_Exit"/>
-            </MenuItem>
-            <MenuItem Header="帮助">
-                <MenuItem Header="关于" />
-                <MenuItem Header="检测更新" />
-                <MenuItem Header="问题反馈" />
-            </MenuItem>
-        </Menu>
-        <ToolBar Grid.ColumnSpan="2" Height="38" Margin="0,19,0,0" VerticalAlignment="Top">
-            <ToolBarPanel Height="30" VerticalAlignment="Top" Width="58">
-                <Button Content="新建"  x:Name="RedisHostNew"   Margin="5 0"  HorizontalAlignment="Left" Width="48" Click="Button_Redis_New" Height="30" VerticalAlignment="Bottom"/>
-            </ToolBarPanel>
-        </ToolBar>
 
-        <StatusBar Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,0">
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="3" Margin="0,0,0,0">
             <StatusBarItem>
-                <Label Content="version:v0.1" Width="87"/>
+                <Label Content="version:v0.1"/>
             </StatusBarItem>
-            <StatusBarItem>
-                <TextBox VerticalContentAlignment="Center" Name="RedisCommandInput" Grid.Column="1" TextWrapping="Wrap" Text="" TextChanged="RedisCommandInput_TextChanged"  KeyDown="RedisCommandExec_KeyDown" VerticalAlignment="Bottom" Height="21" Width="240"/>
-            </StatusBarItem>
+            <StatusBarItem/>
         </StatusBar>
     </Grid>
 </Window>
